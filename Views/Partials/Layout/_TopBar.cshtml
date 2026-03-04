@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+
+
+@{
+	var rootContent = Umbraco.ContentAtRoot();
+	var siteSettings = rootContent.OfType<SiteSettings>().FirstOrDefault();
+
+	var contactAdress = siteSettings?.ContactAdress ?? "Ingen adress angiven";
+}
+
+<div class="bg-primary">
+	<div class="max-w-7xl mx-auto px-4 flex items-center justify-between">
+		<p class="text-xs text-neutral">@contactAdress</p>
+
+		<div class="flex">
+				
+			@if (siteSettings?.PlatformList != null)
+			{
+                @foreach (var item in siteSettings.PlatformList)
+                {
+                    if (item.Content is SocialMediaItem mediaItem)
+                    {
+                        var name = mediaItem.PlatformName?.Trim().ToLower();
+                        if (name == "facebook")
+                        {
+                            <a href="@mediaItem.PlatformAccountUrl" target="_blank"
+                               class="flex items-center justify-center p-3 border-l border-[var(--clr-main-light)] last:border-r text-white">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                        }
+                        else if (name == "linkedin")
+                        {
+                            <a href="@mediaItem.PlatformAccountUrl" target="_blank"
+                               class="flex items-center justify-center p-3 border-l border-[var(--clr-main-light)] last:border-r text-white">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                        }
+                    }
+                }
+
+			}
+
+
+		</div>
+
+
+	</div>
+</div>

@@ -1,0 +1,22 @@
+﻿@using Umbraco.Cms.Core.Models.Blocks
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<BlockListModel>
+
+@if (Model == null || !Model.Any())
+{
+    return;
+}
+
+@foreach (var block in Model)
+{
+    var contentAlias = block.Content?.ContentType?.Alias;
+
+    // 1) Skippa om blocket av någon anledning saknar content
+    if (string.IsNullOrWhiteSpace(contentAlias))
+        continue;
+
+    // 2) Skippa settings-element om de råkat hamna i listan
+    if (contentAlias.EndsWith("Settings", StringComparison.OrdinalIgnoreCase))
+        continue;
+
+    @await Html.PartialAsync($"blocklist/Components/{contentAlias}", block)
+}
